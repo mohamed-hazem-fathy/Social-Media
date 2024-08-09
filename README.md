@@ -1,0 +1,1 @@
+This repository hosts the development of a basic social media platform designed to connect users in innovative ways. The platform provides a straightforward and engaging user experience with essential features for communication and community building, all built using Html ,Bootstrap vanilla JavaScript.
