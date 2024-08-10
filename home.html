@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/js/bootstrap.min.js">
     <script src="/node_modules/axios/dist/axios.min.js"></script>
+    <script src="/fontawesome-free-6.6.0-web/css/all.min.css"></script>
+    <script src="/fontawesome-free-6.6.0-web/js/all.min.js"></script>
 
     <style>
         /* width */
@@ -38,10 +40,12 @@ body {
 margin-top: 30px;
 }
     </style>
+
+
 </head>
 <body>
-  <!-- MODAL MODE -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- MODAL login -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -52,23 +56,27 @@ margin-top: 30px;
           <form>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Username:</label>
-              <input type="text" class="form-control" id="recipient-name">
+              <input type="text" class="form-control" id="username-input" value="mohamed_24">
             </div>
             <div class="mb-3">
               <label for="message-text" class="col-form-label">password:</label>
-              <input type="password" class="form-control" id="recipient-name">
+              <input type="password" class="form-control" id="password-input" value="123456">
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-primary" onclick="logbtnclicked()">Login</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL MODE -->
+  <!-- MODAL login -->
+
+
+<!--*******************ALERTS*****************-->
+<div id="success-alert" style="position: fixed; z-index: 99999; width: 30%; bottom: 0; right: 0;"></div>
     <!-- navgiation Bar Cont -->
     <div class="container ">
 
@@ -89,10 +97,21 @@ margin-top: 30px;
                             <a class="nav-link active" href="#">Profile</a>
                           </li>
                         </ul>
-                        <div>
-                             <button type="button" data-bs-toggle="modal" data-bs-whatever="@mdo" data-bs-target="#exampleModal"class="btn btn-outline-success mx-2">Login</button>
-                            <button class="btn btn-outline-success">register</button>
+                        <!--non-logged in user-->
+                        <div id="logged-in-dev">
+                             <button id="login-btn" type="button" data-bs-toggle="modal" data-bs-whatever="@mdo" data-bs-target="#loginModal"class="btn btn-outline-success mx-2">Login</button>
+                            <button id="register-btn" class="btn btn-outline-success">register</button>
                           </div>
+                          <!--non-logged in user-->
+
+                          <!--for logged in user-->
+
+                          <div id="logout-dev">
+                            <button onclick="logout()" id="logout-btn" type="button" data-bs-toggle="modal" data-bs-whatever="@mdo" class="btn btn-outline-danger mx-2">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                         </div>
+
+
+                          <!--for logged in user-->
                       </div>
                     </div>
                   </nav>
@@ -246,78 +265,17 @@ margin-top: 30px;
 
 
    </div>
-   <!-- Main Content -->
+   <!-- end Content -->
+
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   <script src="/js/getpost.js"></script>
+<script src="/js/login.js"></script>
+<script src="/js/logout.js"></script>
+
+
 
 </body>
 <script>
-
-axios.get("https://tarmeezacademy.com/api/v1/posts?limit=2")
-.then((respons) => {
-   console.log("the respons is +" );
-   console.log(respons);
-  const posts = respons.data.data;
-  console.log(posts)
-  document.getElementById("posts").innerHTML= "";
-
-  for(post of posts)
-  {
-    console.log(post)
-    const author = post.author
-    const postTitle = "";
-
-    if(post.title != null) {
-      post.title = postTitle
-    }
-    const content = `<div class="card shadow my-2">
-                  <div class="card-header">
-                      <img class="border border-2" src="${author.profile_image}" alt="" style="width:40px; height:40px; border-radius:50%">
-                      <b>${author.username}</b>
-                  </div>
-                  <div class="card-body">
-                      <img class="w-100" src="${post.image}" alt="">
-                      <h6 class="mt-1" style="color: gray;">${post.created_at}</h6>
-                      <h5>${postTitle}</h5>
-                      <p>${post.body}</p>
-                      <hr>
-                      <div >
-                      <div class="d-flex justify-content-evenly">
-                          <div>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fingerprint" viewBox="0 0 16 16">
-                                  <path d="M8.06 6.5a.5.5 0 0 1 .5.5v.776a11.5 11.5 0 0 1-.552 3.519l-1.331 4.14a.5.5 0 0 1-.952-.305l1.33-4.141a10.5 10.5 0 0 0 .504-3.213V7a.5.5 0 0 1 .5-.5Z"/>
-                                  <path d="M6.06 7a2 2 0 1 1 4 0 .5.5 0 1 1-1 0 1 1 0 1 0-2 0v.332q0 .613-.066 1.221A.5.5 0 0 1 6 8.447q.06-.555.06-1.115zm3.509 1a.5.5 0 0 1 .487.513 11.5 11.5 0 0 1-.587 3.339l-1.266 3.8a.5.5 0 0 1-.949-.317l1.267-3.8a10.5 10.5 0 0 0 .535-3.048A.5.5 0 0 1 9.569 8m-3.356 2.115a.5.5 0 0 1 .33.626L5.24 14.939a.5.5 0 1 1-.955-.296l1.303-4.199a.5.5 0 0 1 .625-.329"/>
-                                  <path d="M4.759 5.833A3.501 3.501 0 0 1 11.559 7a.5.5 0 0 1-1 0 2.5 2.5 0 0 0-4.857-.833.5.5 0 1 1-.943-.334m.3 1.67a.5.5 0 0 1 .449.546 10.7 10.7 0 0 1-.4 2.031l-1.222 4.072a.5.5 0 1 1-.958-.287L4.15 9.793a9.7 9.7 0 0 0 .363-1.842.5.5 0 0 1 .546-.449Zm6 .647a.5.5 0 0 1 .5.5c0 1.28-.213 2.552-.632 3.762l-1.09 3.145a.5.5 0 0 1-.944-.327l1.089-3.145c.382-1.105.578-2.266.578-3.435a.5.5 0 0 1 .5-.5Z"/>
-                                  <path d="M3.902 4.222a5 5 0 0 1 5.202-2.113.5.5 0 0 1-.208.979 4 4 0 0 0-4.163 1.69.5.5 0 0 1-.831-.556m6.72-.955a.5.5 0 0 1 .705-.052A4.99 4.99 0 0 1 13.059 7v1.5a.5.5 0 1 1-1 0V7a3.99 3.99 0 0 0-1.386-3.028.5.5 0 0 1-.051-.705M3.68 5.842a.5.5 0 0 1 .422.568q-.044.289-.044.59c0 .71-.1 1.417-.298 2.1l-1.14 3.923a.5.5 0 1 1-.96-.279L2.8 8.821A6.5 6.5 0 0 0 3.058 7q0-.375.054-.736a.5.5 0 0 1 .568-.422m8.882 3.66a.5.5 0 0 1 .456.54c-.084 1-.298 1.986-.64 2.934l-.744 2.068a.5.5 0 0 1-.941-.338l.745-2.07a10.5 10.5 0 0 0 .584-2.678.5.5 0 0 1 .54-.456"/>
-                                  <path d="M4.81 1.37A6.5 6.5 0 0 1 14.56 7a.5.5 0 1 1-1 0 5.5 5.5 0 0 0-8.25-4.765.5.5 0 0 1-.5-.865m-.89 1.257a.5.5 0 0 1 .04.706A5.48 5.48 0 0 0 2.56 7a.5.5 0 0 1-1 0c0-1.664.626-3.184 1.655-4.333a.5.5 0 0 1 .706-.04ZM1.915 8.02a.5.5 0 0 1 .346.616l-.779 2.767a.5.5 0 1 1-.962-.27l.778-2.767a.5.5 0 0 1 .617-.346m12.15.481a.5.5 0 0 1 .49.51c-.03 1.499-.161 3.025-.727 4.533l-.07.187a.5.5 0 0 1-.936-.351l.07-.187c.506-1.35.634-2.74.663-4.202a.5.5 0 0 1 .51-.49"/>
-                                </svg>
-                                <span>(999k)Like</span>
-                          </div>
-
-
-                          <div>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                            </svg>
-                          <span>(${post.comments_count}) Comment</span>
-                      </div>
-
-                          <div>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                                  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
-                                </svg>
-                                <span>(858K)Share</span>
-                          </div>
-                      </div>
-                      </div>
-                  </div>
-                </div>`;
-
-                document.getElementById("posts").innerHTML += content;
-
-  }
-
-})
-
-
+  setupUI ();
 </script>
 </html>
