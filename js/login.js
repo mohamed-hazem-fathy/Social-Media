@@ -1,9 +1,11 @@
+
 // Function for user login
 function logbtnclicked() {
 
 
     // Get the username and password input values from the HTML form
     let user = document.getElementById("username-input").value;
+
 
     let pass = document.getElementById("password-input").value;
 
@@ -18,15 +20,21 @@ function logbtnclicked() {
 
 
      axios.post(`${url}/login`,params).then((resp) => {
-        console.log(resp.data.token); // Log the response data (optional)
-        localStorage.setItem("token ",resp.data.token);
-        localStorage.setItem("user" ,JSON.stringify( resp.data.user));
+
+
+        console.log(resp.data.user); // Log the response data (optional)
+        localStorage.setItem("token",resp.data.token);
+        localStorage.setItem("imgprofile",resp.data.user.profile_image)
+        localStorage.setItem("user" ,JSON.stringify(resp.data.user));
 
 
           // Redirect to the home.html page after successful login
-          window.location.href = "home.html";
+          const modal = document.getElementById("loginModal");
+          const modalinstance = bootstrap.Modal.getInstance(modal);
+          modalinstance.hide();
+          // window.location.href = "home.html";
+          showAlert("logged in successfly","success");
 
-          alert("user logged in successfully")
           setupUI ();
 
 
@@ -38,9 +46,8 @@ function logbtnclicked() {
 }
 
 
-showSuccesAlert()
 
-function showSuccesAlert() {
+function showAlert(custommassage , type) {
         const alertPlaceholder = document.getElementById('success-alert')
         const appendAlert = (message, type) => {
         const wrapper = document.createElement('div')
@@ -54,32 +61,63 @@ function showSuccesAlert() {
         alertPlaceholder.append(wrapper)
         }
 
-        const alertTrigger = document.getElementById('liveAlertBtn')
-        if (alertTrigger) {
-        alertTrigger.addEventListener('click', () => {
-            appendAlert('Nice, you triggered this alert message!', 'success')
-         })
-        }
+
+            appendAlert(custommassage, type);
+
+            // setTimeout(() => {
+
+            //   const alert = bootstrap.Alert.getOrCreateInstance('#success-alert');
+            //   // alert.close()
+            //   }, 4000);
+
+
 }
 // Function to setup the user interface based on authentication token
 function setupUI () {
      // Retrieve the token from local storage
-    console.log(localStorage.getItem("token "))
-    const token = localStorage.getItem("token ")
+    const token = localStorage.getItem("token");
+    const imgeprofile = localStorage.getItem("imgprofile");
+    const addpost = document.getElementById("add-btn");
+
 
       // Get references to the HTML elements
-    const logindiv  = document.getElementById("logged-in-dev")
-    let logoutdiv = document.getElementById("logout-dev")
+    let logindiv  = document.getElementById("logged-in-dev");
+    let logoutdiv = document.getElementById("logout-dev");
+
 
       // Check if the token is null (user is not logged in)
     if (token == null) {
         // Show the login div and hide the logout div
         logindiv.style.display = "block";
         logoutdiv.style.display = "none";
+        if(addpost != null) {
+          addpost.style.display = "none";
+        }
+
+
 
     }else {
         // Show the logout div and hide the login div
         logindiv.style.display = "none";
         logoutdiv.style.display = "inline-block";
+        if(addpost != null) {
+          addpost.style.display = "block";
+        }
+        const user = getCurrentUser();
+        document.getElementById("nav-user-name").innerHTML = user.username;
+        document.getElementById("photp-nav").src = imgeprofile;
     }
+}
+
+function getCurrentUser() {
+
+  let user = null;
+  const storageUser = localStorage.getItem("user")
+
+  if(storageUser != null) {
+    user = JSON.parse(storageUser)
+  }
+  return user;
+
+
 }

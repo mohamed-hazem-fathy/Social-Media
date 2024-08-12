@@ -15,5 +15,6 @@ function showSuccessAlert(custemMessage, typ) {
     };
     alert(custemMessage, typ);
 
-    // todo: fix hide/show alert problem
+
 }
+
