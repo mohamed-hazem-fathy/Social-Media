@@ -36,6 +36,7 @@ function logbtnclicked() {
           showAlert("logged in successfly","success");
 
           setupUI ();
+          getPost();
 
 
 
@@ -64,11 +65,6 @@ function showAlert(custommassage , type) {
 
             appendAlert(custommassage, type);
 
-            // setTimeout(() => {
-
-            //   const alert = bootstrap.Alert.getOrCreateInstance('#success-alert');
-            //   // alert.close()
-            //   }, 4000);
 
 
 }
@@ -83,6 +79,7 @@ function setupUI () {
       // Get references to the HTML elements
     let logindiv  = document.getElementById("logged-in-dev");
     let logoutdiv = document.getElementById("logout-dev");
+    let commintdev =  document.getElementById("comments");
 
 
       // Check if the token is null (user is not logged in)
@@ -93,6 +90,7 @@ function setupUI () {
         if(addpost != null) {
           addpost.style.display = "none";
         }
+        // commintdev.style.display = "none";
 
 
 
@@ -102,10 +100,15 @@ function setupUI () {
         logoutdiv.style.display = "inline-block";
         if(addpost != null) {
           addpost.style.display = "block";
+
+
         }
+        // commintdev.style.display = "block";
         const user = getCurrentUser();
         document.getElementById("nav-user-name").innerHTML = user.username;
-        document.getElementById("photp-nav").src = imgeprofile;
+        document.getElementById("photo-nav").src = user.profile_image;
+        console.log(imgeprofile)
+        console.log(user)
     }
 }
 

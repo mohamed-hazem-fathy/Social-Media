@@ -95,7 +95,7 @@ margin-top: 30px;
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Creat A New Post</h1>
+          <h1 class="modal-title fs-5" id="post-modal-title">Creat A New Post</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -103,6 +103,7 @@ margin-top: 30px;
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Title</label>
               <input type="text" class="form-control" id="post-title-input" value="">
+              <input type="hidden" id="post-id-input" value="" >
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">image</label>
@@ -122,7 +123,7 @@ margin-top: 30px;
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="creatNewPostClicked()">Creat</button>
+          <button type="button" id="post-modal-submit-btn" class="btn btn-primary" onclick="creatNewPostClicked()">Creat</button>
         </div>
       </div>
     </div>
@@ -175,7 +176,7 @@ margin-top: 30px;
   <!-- regestermodal login -->
 
   <!-- Ade Post Bottom -->
-  <div data-bs-toggle="modal" data-bs-target="#creat-post-modal" class="bg-primary" id="add-btn">+</div>
+  <div  class="bg-primary" onclick="addBtnClicked()" id="add-btn">+</div>
 
 
 
@@ -211,7 +212,7 @@ margin-top: 30px;
                           <!--for logged in user-->
 
                           <div id="logout-dev">
-                            <img id="photp-nav"  class="rounded-circle" style="width: 40px; height: 40px;" src="./photo/WhatsApp Image 2024-03-29 at 00.36.31_28757c79.jpg" alt="">
+                            <img id="photo-nav"  class="rounded-circle" style="width: 40px; height: 40px;" src="./photo/WhatsApp Image 2024-03-29 at 00.36.31_28757c79.jpg" alt="">
                             <b id="nav-user-name">Mohamed4</b>
                             <button onclick="logout()" id="logout-btn" type="button" data-bs-toggle="modal" data-bs-whatever="@mdo" class="btn btn-outline-danger mx-2">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
                          </div>

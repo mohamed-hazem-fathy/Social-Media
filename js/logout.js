@@ -7,4 +7,5 @@ function logout() {
     showAlert("Logged out successfully" , "success");
     // Update the user interface to reflect the logged-out state
     setupUI ()
+    
 }

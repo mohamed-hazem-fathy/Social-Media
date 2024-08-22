@@ -1,8 +1,9 @@
 
 function creatNewPostClicked()
 {
-
-    let url = "https:tarmeezacademy.com/api/v1";
+    let postid = document.getElementById("post-id-input").value;
+  let isCerat = postid == null || postid == ""
+    let url = "";
     const token = localStorage.getItem("token")
     const imgeprofile = localStorage.getItem("imgprofile")
      // Get the title and body and image input values from the HTML form
@@ -20,21 +21,33 @@ function creatNewPostClicked()
         "Content-Type": "multipart/form-data",
         "authorization" : `Bearer ${token}`
       };
-      axios.post(`${url}/posts`,formData, {headers: headers}).then((resspo) => {
 
-            const modal = document.getElementById("creat-post-modal");
-            const modalinstance = bootstrap.Modal.getInstance(modal);
-            modalinstance.hide()
-          // Redirect to the  page after add  new post
-          getPosts();
+      if(isCerat) {
+        url =`https:tarmeezacademy.com/api/v1/posts`
 
-        //   window.location.href = "home.html";
-          showAlert("New Post Has Been Created","success");
 
-      }).catch((error) => {
-        console.log(error.response.data.message)
-        const massage = error.response.data.message;
-        showAlert(massage,"danger");
-      });
+      }else {
+        formData.append("_method", "put")
+          url =`https:tarmeezacademy.com/api/v1/posts/${postid}`
+
+
+      }
+      axios.post(url,formData, {headers: headers}).then((resspo) => {
+
+        const modal = document.getElementById("creat-post-modal");
+        const modalinstance = bootstrap.Modal.getInstance(modal);
+        modalinstance.hide()
+      // Redirect to the  page after add  new post
+      getPosts();
+
+    //   window.location.href = "home.html";
+      showAlert("New Post Has Been Created","success");
+
+  }).catch((error) => {
+    console.log(error.response.data.message)
+    const massage = error.response.data.message;
+    showAlert(massage,"danger");
+  });
+
 
 }

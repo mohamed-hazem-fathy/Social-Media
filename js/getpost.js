@@ -31,6 +31,15 @@ function getPosts(relod = true, page = 1)
      let postTitle = "";
 
 
+     //Show Or Hide (EDIT) BUTTON
+     let user = getCurrentUser()
+     let ismypost = user != null && post.author.id == user.id
+     let editBtnContent = ``
+
+     if(ismypost) {
+      editBtnContent = `<button class="btn btn-secondary" style="float: right" onclick="editPostBtnClicked('${encodeURIComponent(JSON.stringify(post))}')">Edit</button>`
+     }
+
      if(post.title != null) {
       postTitle= post.title
      }
@@ -38,6 +47,8 @@ function getPosts(relod = true, page = 1)
                    <div class="card-header">
                        <img class="border border-2" src="${author.profile_image}" alt="" style="width:40px; height:40px; border-radius:50%">
                        <b>${author.username}</b>
+                       ${editBtnContent}
+
                    </div>
                    <div class="card-body" onclick="postClicked(${post.id})" style="cursor: pointer;">
                        <img class="w-100" src="${post.image}" alt="">
@@ -86,10 +97,12 @@ function getPosts(relod = true, page = 1)
 function postClicked(postId) {
 
   window.location = `postdetals.html?postId=${postId}`;
+  setupUI();
 
 
 
 }
+
 getPost();
 
 function getPost()
@@ -151,16 +164,86 @@ function getPost()
                                         ${commentsContent}
                             </div>
                              <!-- comments -->
+
+                          <!--add new comment -->
+
+                          <div class="input-group mb-3" id="add-comment-div">
+                            <input id="comment-input" type="text" placeholder="add your comment here..." class="form-control">
+                            <button onclick="creatpostClick()" class="btn btn-outline-primary" type="button">send</button>
+
+                          </div>
+
+                           <!--add new comment -->
                         </div>
-                  </div>`
+                  </div>`;
+
 
                   document.getElementById("post").innerHTML = postContent;
                   console.log(post)
+                  setupUI();
+
 
  })
 
 
+};
+function creatpostClick() {
+  let commentbody = document.getElementById("comment-input").value
+  let prams = {
+    "body": commentbody
+  }
+  let token = localStorage.getItem("token")
+  let url = `https://tarmeezacademy.com/api/v1/posts/${id}/comments`
+
+  axios.post(url,prams, {
+    headers: {
+      "authorization" : `Bearer ${token}`
+    }
+  }).then((response) => {
+    console.log(response.data)
+    showAlert("The comment Has Been Creat Successfly", "success");
+    getPost();
+  }).catch((erorr) => {
+    const errormassage = erorr.response.data.message;
+    showAlert(errormassage, "danger");
+
+  }
+  )
+
 }
+
+function editPostBtnClicked(postobject) {
+  let post = JSON.parse(decodeURIComponent(postobject))
+  console.log(post)
+  document.getElementById("post-id-input").value = post.id
+  document.getElementById("post-modal-title").innerHTML = "Edit Post"
+  document.getElementById("post-title-input").value = post.title
+  document.getElementById("post-body-input").innerHTML = post.body
+  document.getElementById("post-modal-submit-btn").innerHTML = "Update"
+  let postmodal = new bootstrap.Modal(document.getElementById("creat-post-modal"), {})
+  postmodal.toggle()
+}
+
+function addBtnClicked () {
+  document.getElementById("post-id-input").value = ""
+  document.getElementById("post-modal-title").innerHTML = "Creat A New Post"
+  document.getElementById("post-title-input").value =""
+  document.getElementById("post-body-input").innerHTML = ""
+  document.getElementById("post-modal-submit-btn").innerHTML = "Creat"
+  let postmodal = new bootstrap.Modal(document.getElementById("creat-post-modal"), {})
+  postmodal.toggle()
+}
+
+ function getCurrentUser() {
+  let user = null
+const stronguser = localStorage.getitem("user")
+  if(stronguser != null) {
+    user = JSON.parse(stronguser)
+  }
+
+  return user
+
+ }
 
 
 
